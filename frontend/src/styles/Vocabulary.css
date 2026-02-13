@@ -1,0 +1,98 @@
+body{
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+}
+button{
+    border: 0px;
+    border-radius: 10px;
+    font-size: inherit;
+    font-size: inherit;
+    padding: 12px;
+    color: white;
+    background-color: #42a8a0;
+}
+button:hover{
+    background-color: #19877e;
+    cursor: pointer;
+}
+input{
+    border: 1px solid #42a8a0;
+    margin: 0px 8px 0px 0px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 25rx;
+    border-radius: 10px;
+}
+.searchInput{
+    display:block;
+    margin-bottom: 8px;
+}
+.vocabulary{
+    padding: 10px;
+    border: 6px solid #42a8a0;
+    border-radius: 10px;
+}
+.wordAddForm{
+    display: none;
+    align-items: center;
+}
+.deleteButton{
+    color:red;
+    display: inline-block;
+    cursor: pointer;
+}
+.deleteButton:hover{
+    color:black;
+}
+.vocabularyWord{
+    margin: 10px 0px 0px 0px;
+    font-size: 25px;
+}
+.editButton{
+    vertical-align: middle;
+    color: blue;
+    cursor: pointer;
+}
+.editButton:hover{
+    color: black;
+}
+.editRecordForm{
+    display: flex;
+    align-items: center;
+}
+.cancelButton, .applyButton{
+    font-size: 53px;
+    cursor: pointer;
+}
+.cancelButton{
+    color:red;
+}
+.cancelButton:hover{
+    color:rgb(154, 4, 4);
+}
+.applyButton{
+    color:green;
+}
+.applyButton:hover{
+    color:darkgreen;
+}
+.record{
+    display: flex;
+    align-items: center;
+    text-align: left;
+    font-weight: normal;
+    justify-content: flex-start;
+}
+.button{
+    font-size: 25px;
+}
+.vocabularyWord, .resultDiv{
+    font-size: 35px;
+}
+.trainingButton{
+    margin-bottom: 8px;
+    margin-right: 8px;
+}
+input{
+    font-size: 25px;
+}

@@ -1,0 +1,39 @@
+.backgroundModal{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+.deleteModal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    background-color: white;
+    padding: 16px;
+    border-radius: 10px;
+}
+.title{
+    font-size: 32px;
+}
+.wordToDelete{
+    font-size: 25px;
+    font-weight: normal;
+}
+.buttons{
+    font-size: 25px;
+}
+.buttons > *{
+    margin: 6px;
+}
+.deleteWordButton{
+    background-color: red;
+}
+.deleteWordButton:hover{
+    background-color: darkred;
+}
