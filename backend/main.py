@@ -27,7 +27,7 @@ class WordForTrainingRUtoPL(BaseModel):
     draggableWordSpelling: str
     fixedWordSpelling: str
 
-postgre_url = "postgresql://postgres:postgres@localhost:5432/application"
+postgre_url = "postgresql://postgres:postgres@postgres:5432/application"
 engine = create_engine(postgre_url)
 
 def create_db_and_tables():
@@ -41,7 +41,7 @@ SessionDep = Annotated[Session, Depends(get_session)]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    create_db_and_tables()
+    # create_db_and_tables()
     yield
 
 app = FastAPI(lifespan=lifespan)
