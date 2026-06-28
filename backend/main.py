@@ -12,7 +12,7 @@ class WordData(BaseModel):
     pl_spelling: str
     ru_spelling: str
 
-class WordDB(SQLModel, table = True):
+class Word_DB(SQLModel, table = True):
     id: int = Field(primary_key = True)
     pl_spelling: str = Field(index = True)
     ru_spelling: str = Field(index = True)
@@ -31,7 +31,12 @@ postgre_url = "postgresql://postgres:postgres@postgres:5432/application"
 engine = create_engine(postgre_url)
 
 def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
+    # Используем явный контекстный менеджер (with engine.begin())
+    # Это гарантирует, что соединение откроется, создаст таблицы, 
+    # закоммитит транзакцию и СРАЗУ ЖЕ жестко закроется, освободив базу.
+    with engine.begin() as connection:
+        SQLModel.metadata.create_all(connection)
+
 
 def get_session():
     with Session(engine) as session:
@@ -41,7 +46,7 @@ SessionDep = Annotated[Session, Depends(get_session)]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # create_db_and_tables()
+    create_db_and_tables()
     yield
 
 app = FastAPI(lifespan=lifespan)
@@ -61,14 +66,14 @@ def read_root():
     return {"message":"Hello World"}
 
 @app.get("/vocabulary")
-def show_words(session: SessionDep) -> list[WordDB]:
-    query = text("SELECT * FROM WordDB ORDER BY id")
+def show_words(session: SessionDep) -> list[Word_DB]:
+    query = text("SELECT * FROM Word_DB ORDER BY id")
     result = session.exec(query)
     return result.all()
 
 @app.get("/get_words")
 def get_words(session: SessionDep, mode: str) -> list[WordForTrainingRUtoPL]:
-    query = text("SELECT * FROM WordDB")
+    query = text("SELECT * FROM Word_DB")
     result = session.exec(query)
     if mode == 'ru-to-pl':
         return [WordForTrainingRUtoPL(
@@ -89,8 +94,8 @@ def get_words(session: SessionDep, mode: str) -> list[WordForTrainingRUtoPL]:
         raise HTTPException(status_code=404, detail="Incorrect training mode")
 
 @app.post("/vocabulary/add")
-def add_word(word_data: WordDB, session: SessionDep):    
-    word = WordDB(
+def add_word(word_data: Word_DB, session: SessionDep):    
+    word = Word_DB(
         pl_spelling=word_data.pl_spelling,
         ru_spelling=word_data.ru_spelling
     )
@@ -101,7 +106,7 @@ def add_word(word_data: WordDB, session: SessionDep):
 
 @app.post("/vocabulary/delete/{word_id}")
 def delete_word(word_id: int, session: SessionDep):
-    word = session.get(WordDB, word_id)
+    word = session.get(Word_DB, word_id)
     if not word: 
         raise HTTPException(status_code=404, detail="No such word")
     session.delete(word)
@@ -111,7 +116,7 @@ def delete_word(word_id: int, session: SessionDep):
 
 @app.put("/vocabulary/edit/{word_id}")
 def edit_word(word_id: int, word_data: WordData, session: SessionDep):
-    word = session.get(WordDB, word_id)
+    word = session.get(Word_DB, word_id)
     if not word:
         raise HTTPException(status_code=404, detail="No such word")
 
@@ -125,7 +130,7 @@ def edit_word(word_id: int, word_data: WordData, session: SessionDep):
 
 @app.get("/get_vocabulary")
 def get_vocabulary(session: SessionDep):
-    query = text("SELECT * FROM WordDB")
+    query = text("SELECT * FROM Word_DB")
     result = session.exec(query)
     content = ''
     for record in result.all():
